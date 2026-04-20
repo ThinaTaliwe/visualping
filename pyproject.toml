@@ -1,0 +1,24 @@
+[project]
+name = "visualping-fx-bot"
+version = "0.1.0"
+description = "Automated FX trading scaffold driven by Visualping updates"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.115.0",
+  "uvicorn>=0.30.0",
+  "sqlmodel>=0.0.22",
+  "pydantic-settings>=2.4.0"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.3.0"
+]
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
