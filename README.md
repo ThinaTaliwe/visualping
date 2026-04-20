@@ -1,6 +1,79 @@
 # Visualping FX Bot (Scaffold)
 
-This repository now contains a production-oriented scaffold for an automated FX trading system driven by Visualping updates.
+This repository contains a production-oriented scaffold for an automated FX trading system driven by Visualping updates.
+
+## VS Code + Server setup (fixes the exact errors you hit)
+
+### 1) Clone and enter the **actual repo folder**
+Your `git status` error happened because you ran Git commands from `/opt/Bot_Visualping` instead of `/opt/Bot_Visualping/visualping`.
+
+```bash
+cd /opt/Bot_Visualping
+git clone https://github.com/ThinaTaliwe/visualping.git
+cd visualping
+```
+
+Now this should work:
+
+```bash
+git status
+```
+
+### 2) If you accidentally ran `git init` in the parent folder
+You created an extra Git repo in `/opt/Bot_Visualping/.git`. Remove it:
+
+```bash
+cd /opt/Bot_Visualping
+rm -rf .git
+cd visualping
+git status
+```
+
+### 3) Use Python 3 (not `python`)
+On Debian/Ubuntu servers, `python` may not exist by default. Use `python3`.
+
+```bash
+sudo apt update
+sudo apt install -y python3 python3-venv python3-pip
+```
+
+### 4) Create virtual env + install dependencies
+Use one command:
+
+```bash
+./scripts/bootstrap.sh
+```
+
+Or manually:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+pip install -e .[dev]
+```
+
+### 5) Run the API
+
+```bash
+source .venv/bin/activate
+uvicorn app.main:app --reload
+```
+
+### 6) Open in VS Code
+- Use **Remote - SSH** to open `/opt/Bot_Visualping/visualping`.
+- Recommended extensions are in `.vscode/extensions.json`.
+- Interpreter auto-points to `.venv/bin/python` via `.vscode/settings.json`.
+- You can run/debug `uvicorn` using `.vscode/launch.json`.
+
+## Makefile shortcuts
+
+```bash
+make install   # create venv + install deps
+make run       # run uvicorn
+make test      # run pytest
+make compile   # python -m compileall app tests
+```
 
 ## What is implemented
 
@@ -13,16 +86,7 @@ This repository now contains a production-oriented scaffold for an automated FX 
 - Paper broker adapter for safe non-live execution.
 - SQLModel persistence for decision logs and positions.
 
-## Quick start
-
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -e .[dev]
-uvicorn app.main:app --reload
-```
-
-Set env vars as needed:
+## Environment variables
 
 ```bash
 export FXBOT_VISUALPING_WEBHOOK_TOKEN='change-me'
